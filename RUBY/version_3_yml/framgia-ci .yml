@@ -1,0 +1,72 @@
+project_type: ruby
+build:
+  general_test:
+    image: daothaison/ruby-workspace:latest
+    #environment:
+      #YOU_ENVIRONMENT_1: VALUE_1
+      #YOU_ENVIRONMENT_1: VALUE_2
+      #YOU_ENVIRONMENT_1: VALUE_3
+    services:
+      pgsql:
+        image: postgres:9.6
+        environment:
+          POSTGRES_DB: fcsp_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+    prepare:
+      - rm -f config/database.yml
+      - rm -f config/secrets.yml
+      - cp config/civ3.database.yml config/database.yml
+      - cp config/secrets.yml.example config/secrets.yml
+      - gem update --system --source http://rubygems.org/
+      - gem update
+      - gem update bundler
+      - bundle install
+      - framgia-ci test-connect pgsql 5432 80
+      - RAILS_ENV=test rake db:create db:migrate
+      - framgia-ci run --local
+test:
+  bundle-audit:
+    command: bundle-audit check --update | tee .framgia-ci-reports/bundle-audit.txt
+    ignore: true
+  rspec:
+    command: rspec --format html --out .framgia-ci-reports/rspec.html spec/
+    ignore: true
+  brakeman:
+    command: brakeman -o .framgia-ci-reports/brakeman.html -o .framgia-ci-reports/brakeman.json
+    ignore: true
+  reek:
+    command: echo '' | reek -c config.reek --format html > .framgia-ci-reports/reek.html app/
+    ignore: true
+  rubocop:
+    command: bundle exec rubocop --config .rubocop.yml --require rubocop/formatter/checkstyle_formatter --format RuboCop::Formatter::CheckstyleFormatter --no-color --rails --out .framgia-ci-reports/rubocop.xml
+    ignore: true
+  scss-lint:
+    command: scss-lint --require=scss_lint_reporter_checkstyle --format=Checkstyle --out=.framgia-ci-reports/scss-lint.xml app/assets/stylesheets/
+    ignore: true
+  eslint:
+    command: eslint --format=checkstyle --output-file=.framgia-ci-reports/eslint.xml app/
+    ignore: true
+    # command: rake eslint:run_all format=checkstyle output_file=.framgia-ci-reports/eslint.xml app/
+  rails_best_practices:
+    command: rails_best_practices -e "db/schema.rb,db/migrate,vendor" --format html --output-file .framgia-ci-reports/rails_best_practices.html app/
+    ignore: true
+#deploy:
+  # rocketeer:
+  #   image: fdplugins/ssh-php:php5
+  #   when:
+  #     branch: master
+  #   commands:
+  #     - php rocketeer.phar deploy --on=staging --no-interaction
+  # chatwork:
+  #   image: dangminhtruong/drone-chatwork:latest
+  #   token: your_token  // If you have to pass somethings secret, please create secret and add to yml with format $$you_secret
+  #   room_id: 123456
+  #   message: CI_TEAM
+  #   status: SUCCCESS
+  #   when:
+  #     branch: master
+cache:
+  bundle:
+    folder: vendor/bundle
+    file: Gemfile.lock

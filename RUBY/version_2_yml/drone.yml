@@ -1,0 +1,27 @@
+build:
+  image: daothaison/ruby-workspace:latest
+  pull: true
+  environment:
+    RAILS_ENV: test
+  commands:
+    - rm -f config/database.yml
+    - rm -f config/secrets.yml
+    - cp config/drone.database.yml config/database.yml
+    - cp config/secrets.yml.example config/secrets.yml
+    - gem update --system --source http://rubygems.org/
+    - gem update
+    - gem update bundler
+    - bundle install
+    - framgia-ci test-connect pgsql 5432 80
+    - RAILS_ENV=test rake db:create db:migrate
+    - framgia-ci run --local
+compose:
+  database:
+    image: postgres:9.6
+    environment:
+      POSTGRES_DB: fcsp_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+cache:
+  mount:
+    - vendor/bundle

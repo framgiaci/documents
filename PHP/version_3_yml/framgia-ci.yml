@@ -2,6 +2,10 @@ project_type: php
 build:
   general_test:
     image: daothaison/civ3-workspace:latest
+    #environment:
+      #YOU_ENVIRONMENT_1: VALUE_1
+      #YOU_ENVIRONMENT_1: VALUE_2
+      #YOU_ENVIRONMENT_1: VALUE_3
     services:
       mysql:
         image: mysql:5.7
@@ -54,13 +58,21 @@ test:
       - php -dzend_extension=xdebug.so vendor/bin/phpunit
         --coverage-clover=.framgia-ci-reports/coverage-clover.xml
         --coverage-html=.framgia-ci-reports/coverage
-deploy:
-  rocketeer:
-    image: fdplugins/ssh-php:php5
-    when:
-      branch: master
-    commands:
-      - php rocketeer.phar deploy --on=staging --no-interaction
+#deploy:
+  # rocketeer:
+  #   image: fdplugins/ssh-php:php5
+  #   when:
+  #     branch: master
+  #   commands:
+  #     - php rocketeer.phar deploy --on=staging --no-interaction
+  # chatwork:
+  #   image: dangminhtruong/drone-chatwork:latest
+  #   token: your_token  // If you have to pass somethings secret, please create secret and add to yml with format $$you_secret
+  #   room_id: 123456
+  #   message: CI_TEAM
+  #   status: SUCCCESS
+  #   when:
+  #     branch: master
 cache:
   git:
     folder: .git
