@@ -1,0 +1,27 @@
+build:
+  image: framgia/laravel-workspace
+  commands:
+    - cp .env.testing.example .env
+    - composer install
+    - framgia-ci test-connect 127.0.0.1 3306 60
+    - php artisan migrate --database=mysql_test
+    - framgia-ci run
+compose:
+  database:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: homestead_test
+      MYSQL_USER: homestead_test
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+cache:
+  mount:
+    - .git
+    - vendor
+deploy:
+  rocketeer:
+    image: fdplugins/ssh-php:php5
+    when:
+      branch: master
+    commands:
+      - php rocketeer.phar deploy --on=staging --no-interaction
