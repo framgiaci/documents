@@ -25,7 +25,6 @@ build:
       - composer install
       - framgia-ci test-connect mysql_test 3306 60
       - php artisan migrate --database=mysql_test
-      - framgia-ci run
 test:
   eslint:
     ignore: false
@@ -58,24 +57,13 @@ test:
       - php -dzend_extension=xdebug.so vendor/bin/phpunit
         --coverage-clover=.framgia-ci-reports/coverage-clover.xml
         --coverage-html=.framgia-ci-reports/coverage
-#deploy:
-  # rocketeer:
-  #   image: fdplugins/ssh-php:php5
-  #   when:
-  #     branch: master
-  #   commands:
-  #     - php rocketeer.phar deploy --on=staging --no-interaction
-  # chatwork:
-  #   image: dangminhtruong/drone-chatwork:latest
-  #   token: your_token  // If you have to pass somethings secret, please create secret and add to yml with format $$you_secret
-  #   room_id: 123456
-  #   message: CI_TEAM
-  #   status: SUCCCESS
-  #   when:
-  #     branch: master
+deploy:
+  rocketeer:
+    image: framgiaciteam/deployer:2.0
+    when:
+      branch: develop
+    run: php rocketeer.phar deploy --on=testing --no-interaction
 cache:
-  git:
-    folder: .git
   composer:
     folder: vendor
     file: composer.lock
