@@ -140,3 +140,4 @@ cache:
         git:
             folder: .git
     ``` 
+* `test` Tham khảo tại [Framgia CI CLI Tool Documents](https://github.com/framgiaci/framgia-ci-cli)
