@@ -3,7 +3,7 @@
 ## [English version]()  - Comming soon
 ## [Japanes version]() - Comming soon
 
-## framgia-ci.yml: Một yêu cầu thiết lập quan trọng để có thể chạy framgia-ci là bạn phải có file cấu hình `framgia-ci.yml` trong project của bạn. Bạn có thể tạo một file bằng cách thủ công với nội dụng như dưới đây. Hoặc có thể [Framgia CI CLI Tool](https://github.com/framgiaci/framgia-ci-cli) và sử dụng tool này để tự động sinh file `framgia-ci.yml`. 
+#### framgia-ci.yml: Một yêu cầu thiết lập quan trọng để có thể chạy framgia-ci là bạn phải có file cấu hình `framgia-ci.yml` trong project của bạn. Bạn có thể tạo một file bằng cách thủ công với nội dụng như dưới đây. Hoặc có thể [Framgia CI CLI Tool](https://github.com/framgiaci/framgia-ci-cli) và sử dụng tool này để tự động sinh file `framgia-ci.yml`. 
 
 ```yml
 project_type: php
