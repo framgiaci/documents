@@ -64,7 +64,7 @@ Hiện tại `framgiaCI` đang support login bằng tài khoản github, sau khi
 ## 2. Home page (Active Repositories)
 Là page hiển thị danh sách các project mà user đang login đã được add vào, hoặc do user đó tự tạo và đã active trên hệ thống framgiaCI.
 
-![home](https://raw.githubusercontent.com/phucqd/documents/master/images/Selection_010.png)
+![home](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_010.png)
 
 <table>
     <tr>
@@ -137,7 +137,7 @@ Là page hiển thị danh sách các project mà user đang login đã được
 </table>
 
 ## 3. Available repositories
-![available](https://raw.githubusercontent.com/phucqd/documents/master/images/Selection_012.png)
+![available](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_012.png)
  
  <table>
     <tr>
@@ -164,17 +164,17 @@ Là page hiển thị danh sách các project mà user đang login đã được
 
 > Click vào 1 project, nếu có quyền tạo sẽ active được project và tạo được hook  trên github
 > 
-![available](https://raw.githubusercontent.com/phucqd/documents/master/images/Selection_013.png)
+![available](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_013.png)
 
 > Trường hợp nếu đã active thì có thể deactive project
 > 
-![available](https://raw.githubusercontent.com/phucqd/documents/master/images/Selection_014.png)
+![available](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_014.png)
 
 ## 4. Overview
 Khi click vào một project đã được active tại trang home, ta sẽ đến page overview. Là page hiển thị thông tin tổng quan, thống kê các bản build của project.
 
-![available](https://raw.githubusercontent.com/phucqd/documents/master/images/Selection_015.png)
-![available](https://raw.githubusercontent.com/phucqd/documents/master/images/Selection_016.png)
+![available](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_015.png)
+![available](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_016.png)
 
 >Trong đó:
 >1. Thống kê đếm tổng số build, số build success, error ...
@@ -188,7 +188,7 @@ Tại trang home khi click vào từng bản build, chúng ta sẽ đến page c
 > Violations: Trang thống kê chi tiết, chỉ ra cho bạn các lỗi convention để tiện theo dõi và fix
 > Metrics: với các dự án PHP, các dự án Ruby sẽ là các chuẩn : reek, rspec, brakeman ...
 > 
-![available](https://raw.githubusercontent.com/phucqd/documents/master/images/Selection_023.png)
+![available](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_023.png)
 
 <table>
     <tr>
@@ -227,12 +227,12 @@ Tại trang home khi click vào từng bản build, chúng ta sẽ đến page c
 
 ## 6. Setting & Notification
 Sau khi active project để bắt đầu sử dụng hệ thống, hoặc trong quá trình sử dụng bạn có thể vào setting để lựa chọn những điều kiện chạy build mà bạn muốn hoặc vào notification để lựa chọn hình thức gửi message là chatwork, email hoặc slack.
-![available](https://raw.githubusercontent.com/phucqd/documents/master/images/Selection_021.png)
+![available](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_021.png)
 
 `FramgiaCI` cung cấp tính năng comment trên github khi gặp lỗi convention sẽ có một bot chỉ cho bạn dòng nào của file nào đang bị lỗi, và lỗi đó là gì. Để thực hiện điều đó đơn bản bạn chỉ cẩn vào setting và thêm bot vào project của bạn bằng cách nhấn button  `Add github bot to this repo `
 Nếu trong quá trình làm việc, dự án được thêm member trên github thì bạn cần vào đồng bộ member cho project và quyền cho từng member bằng cách nhất button `Re-sync repo's member`.
 
-![available](https://raw.githubusercontent.com/phucqd/documents/master/images/Selection_022.png)
+![available](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_022.png)
 
 Khi lựa chọn hình thức notification, sau mỗi bản build sẽ có message gửi tới chatwork, email hoặc slack để báo cho bạn biết trạng thái của bản build.
 > Với chatwork:
