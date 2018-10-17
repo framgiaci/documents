@@ -12,7 +12,7 @@ Hiện tại `framgiaCI` đang support login bằng tài khoản github, sau khi
     </tr>
     <tr>
         <td>Admin</td>
-        <td>Mode</td>
+        <td>Mod</td>
         <td>User</td>
     </tr>
     <tr>
@@ -177,10 +177,10 @@ Khi click vào một project đã được active tại trang home, ta sẽ đ�
 ![available](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_016.png)
 
 >Trong đó:
->1. Thống kê đếm tổng số build, số build success, error ...
->2. Chi tiết của bản build gần nhất
->3. Biểu đồ phân tích các bản build trong 10 ngày gần nhất.
->4. Biểu đồ hiển thị lỗi của 10 bản build gần nhất
+>1. Chi tiết của bản build gần nhất
+>2. Thống kê đếm tổng số build, số build success, error ...
+>3. Biểu đồ hiển thị lỗi của 10 bản build gần nhất
+>4. Biểu đồ phân tích các bản build trong 10 ngày gần nhất.
 ## 5. Build
 Tại trang home khi click vào từng bản build, chúng ta sẽ đến page chi tiết của bản build, gồm các tabs:
 > Logs: hiển thị log của những command đã được config trong project
@@ -197,19 +197,19 @@ Tại trang home khi click vào từng bản build, chúng ta sẽ đến page c
     </tr>
     <tr>
         <td>1</td>
-        <td>Là các tab chức năng hiển thị log, coverage, violation ...</td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>Nếu là người tạo ra bản build, bạn có thể restart bản build đó để chạy build lại</td>
-    </tr>
-    <tr>
-        <td>3</td>
         <td>Chi tiết của bản build, người tạo ra bản build ...</td>
     </tr>
     <tr>
-        <td>4</td>
+        <td>2</td>
+        <td>Là các tab chức năng hiển thị log, coverage, violation ...</td>
+    </tr>
+    <tr>
+        <td>3</td>
         <td>Khi build đang running, bạn có thể để cho từng dòng log chay từng dòng và auto scroll xuống cuối</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Khi log quá dài có thể click vào đây để scroll xuống cuối</td>
     </tr>
     <tr>
         <td>5</td>
@@ -217,16 +217,12 @@ Tại trang home khi click vào từng bản build, chúng ta sẽ đến page c
     </tr>
     <tr>
         <td>6</td>
-        <td>Khi log quá dài có thể click vào đây để scroll xuống cuối</td>
-    </tr>
-    <tr>
-        <td>7</td>
         <td>Scroll lên dòng log đầu tiên</td>
     </tr>
 </table>
 
 ## 6. Setting & Notification
-Sau khi active project để bắt đầu sử dụng hệ thống, hoặc trong quá trình sử dụng bạn có thể vào setting để lựa chọn những điều kiện chạy build mà bạn muốn hoặc vào notification để lựa chọn hình thức gửi message là chatwork, email hoặc slack.
+Sau khi active project để bắt đầu sử dụng hệ thống, hoặc trong quá trình sử dụng bạn có thể vào setting để lựa chọn những điều kiện chạy build mà bạn muốn hoặc vào notification để lựa chọn hình thức gửi message là chatwork hoặc slack.
 ![available](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_021.png)
 
 `FramgiaCI` cung cấp tính năng comment trên github khi gặp lỗi convention sẽ có một bot chỉ cho bạn dòng nào của file nào đang bị lỗi, và lỗi đó là gì. Để thực hiện điều đó đơn bản bạn chỉ cẩn vào setting và thêm bot vào project của bạn bằng cách nhấn button  `Add github bot to this repo `
@@ -234,13 +230,10 @@ Nếu trong quá trình làm việc, dự án được thêm member trên github
 
 ![available](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_022.png)
 
-Khi lựa chọn hình thức notification, sau mỗi bản build sẽ có message gửi tới chatwork, email hoặc slack để báo cho bạn biết trạng thái của bản build.
+Khi lựa chọn hình thức notification, sau mỗi bản build sẽ có message gửi tới chatwork hoặc slack để báo cho bạn biết trạng thái của bản build.
 > Với chatwork:
 > 1. Add key cho bot
 > 2. Add room id, lưu ý là bot được add ở trên phải đang join room này.
-
-> Với Email
-> Chỉ cần add một mail hợp lệ 
 
 > Với slack
 > 1. Add slack hook bao gồm: `slack webhook` và `tên hiển thị cho slack` là gì.
