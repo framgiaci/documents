@@ -1,9 +1,8 @@
-# FramgiaCI official documents
+# Integrate FramgiaCI into your Project
 
-## [English version]()  - Comming soon
-## [Japanes version]() - Comming soon
+## framgia-ci.yml
 
-##### `framgia-ci.yml` - Một yêu cầu thiết lập quan trọng để có thể chạy framgia-ci là bạn phải có file cấu hình `framgia-ci.yml` trong project của bạn. Bạn có thể tạo một file bằng cách thủ công với nội dụng như dưới đây. Hoặc có thể [Framgia CI CLI Tool](https://github.com/framgiaci/framgia-ci-cli) và sử dụng tool này để tự động sinh file `framgia-ci.yml`. 
+Một yêu cầu thiết lập quan trọng để có thể chạy framgia-ci là bạn phải có file cấu hình `framgia-ci.yml` trong project của bạn. Bạn có thể tạo một file bằng cách thủ công với nội dụng như dưới đây. Hoặc có thể [Framgia CI CLI Tool](https://github.com/framgiaci/framgia-ci-cli) và sử dụng tool này để tự động sinh file `framgia-ci.yml`. 
 
 ```yml
 project_type: php
@@ -144,47 +143,49 @@ cache:
             folder: .git
     ``` 
 * `test` Tham khảo tại [Framgia CI CLI Tool Documents](https://github.com/framgiaci/framgia-ci-cli)
+
 ## Một số lưu ý khi active và setting projects
 
-* #### Active project và đồng bộ member
-    + Để active projects bạn vào `Available repository` -> `Fetch repositories` -> Chọn repository cần active -> Nhấn `Create Hook`.
+### Active project và đồng bộ member
+- Để active projects bạn vào `Available repository` -> `Fetch repositories` -> Chọn repository cần active -> Nhấn `Create Hook`.
         > Lưu ý, chỉ admin của repository mới có quyền active projects
 
-    + Sau khi bạn đã active project. Bạn vào trang `Detail` -> `setting` và nhấn `Re - SYNC REPO'S MEMBER`. Trong trường hợp các thành viên còn lại không xem được thông tin các bản build.
-* #### Nhận thông báo về kết quả bản build
-    + Mặc định khi bạn active một project, một default chatbot của hệ thống được thêm vào project của bạn. Tuy nhiên, để nhận được thông báo từ default chatbot. Bạn cần bật nhận thông báo chatwork. Bạn vào `Detail` -> `NOTIFICATION` -> Bật `CHATWORK NOTIFICATION` và thêm chatwork chatroom ID mà bạn muốn chatbot gửi thông báo vào đó, trong phần `Room Lists`
-    + Ngoài ra, bạn có thể tự tạo chatbot vào thêm chatbot key vào phần `Chatwork Bot`
-    + Nhận thông kết quả chạy build qua email: Để nhận thông báo qua email, vẫn trong phần `SETTING -> NOTIFICATION` này, bạn thêm email của người nhận vào phần `Email Lists`
-    + Nhận thông báo qua slack: Để nhận thông báo qua slack, bạn bật thông báo slack lên. Và thêm các thông tin cần thiết vào mục `Slack Notification`
+- Sau khi bạn đã active project. Bạn vào trang `Detail` -> `setting` và nhấn `Re - SYNC REPO'S MEMBER`. Trong trường hợp các thành viên còn lại không xem được thông tin các bản build.
 
-* #### Public key
-    + FramgiaCI sẽ cung cấp cho bạn một public key. Bạn có thể dùng public key này để thêm vào server của bạn (Trường hợp bạn muốn sử dụng service auto deploy của FramgiaCI chẳng hạn, bạn sẽ cần đến public key này). Bạn vào phần `Detail` -> `SETTING` -> `SECRET`. Copy và sử dụng public key này...
+### Nhận thông báo về kết quả bản build
+- Mặc định khi bạn active một project, một default chatbot của hệ thống được thêm vào project của bạn. Tuy nhiên, để nhận được thông báo từ default chatbot. Bạn cần bật nhận thông báo chatwork. Bạn vào `Detail` -> `NOTIFICATION` -> Bật `CHATWORK NOTIFICATION` và thêm chatwork chatroom ID mà bạn muốn chatbot gửi thông báo vào đó, trong phần `Room Lists`
+- Ngoài ra, bạn có thể tự tạo chatbot vào thêm chatbot key vào phần `Chatwork Bot`
+- Nhận thông kết quả chạy build qua email: Để nhận thông báo qua email, vẫn trong phần `SETTING -> NOTIFICATION` này, bạn thêm email của người nhận vào phần `Email Lists`
+- Nhận thông báo qua slack: Để nhận thông báo qua slack, bạn bật thông báo slack lên. Và thêm các thông tin cần thiết vào mục `Slack Notification`
+
+### Public key
+- FramgiaCI sẽ cung cấp cho bạn một public key. Bạn có thể dùng public key này để thêm vào server của bạn (Trường hợp bạn muốn sử dụng service auto deploy của FramgiaCI chẳng hạn, bạn sẽ cần đến public key này). Bạn vào phần `Detail` -> `SETTING` -> `SECRET`. Copy và sử dụng public key này...
 
 ## Một số lưu ý khi settup project Ruby
-- Cache Gems
-    * Project ruby thường install gems vào /usr/local/bin/gems và share thư mục gems này giữa các project trên một máy host. Trong khi đó, FramgiaCi cô lập môi trường giữa các bản build khiến các bản build của cùng một project hoàn toàn tách biệt với các bản build còn lại. Nên không thể giữ lại folder share gem này trong các containers. Vậy nên, khi settup một project Ruby bạn hãy cài gem vào trong project folder bằng cách chỉ định install path như dưới đây
+### Cache Gems
+- Project ruby thường install gems vào /usr/local/bin/gems và share thư mục gems này giữa các project trên một máy host. Trong khi đó, FramgiaCi cô lập môi trường giữa các bản build khiến các bản build của cùng một project hoàn toàn tách biệt với các bản build còn lại. Nên không thể giữ lại folder share gem này trong các containers. Vậy nên, khi settup một project Ruby bạn hãy cài gem vào trong project folder bằng cách chỉ định install path như dưới đây
         ```bash
             bundle install --path vendor/bundle
         ```
-- cài đặt rspec, brakeman, rake, reek...
-    * Một số project gặp trường hợp đã chạy bundle install thành công nhưng rspec báo not foud. Nếu gặp trường hợp này, bạn hãy cài thằng các gems đó vào Dockerfile. Như ví dụ dưới đây:
-        ```
-            FROM ruby:2.4.0
-            RUN apt-get install -y libpq5 libpq-dev
-            RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-            RUN apt-get install -y nodejs
-            # Install eslint from https://www.npmjs.com/package/eslint
-            RUN npm install -g eslint
-            RUN eslint --version
-            RUN apt-get -y update && apt-get -y install ruby-full
-            RUN gem install rspec \
-                scss_lint \
-                brakeman \
-                bundle-audit \
-                reek \
-                rails_best_practices \
-                simplecov \
-                robocop \
-                rake
-            WORKDIR /
-        ```
+### Cài đặt rspec, brakeman, rake, reek...
+- Một số project gặp trường hợp đã chạy bundle install thành công nhưng rspec báo not foud. Nếu gặp trường hợp này, bạn hãy cài thằng các gems đó vào Dockerfile. Như ví dụ dưới đây:
+```
+FROM ruby:2.4.0
+RUN apt-get install -y libpq5 libpq-dev
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get install -y nodejs
+# Install eslint from https://www.npmjs.com/package/eslint
+RUN npm install -g eslint
+RUN eslint --version
+RUN apt-get -y update && apt-get -y install ruby-full
+RUN gem install rspec \
+    scss_lint \
+    brakeman \
+    bundle-audit \
+    reek \
+    rails_best_practices \
+    simplecov \
+    robocop \
+    rake
+WORKDIR /
+```
