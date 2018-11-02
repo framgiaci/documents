@@ -110,6 +110,47 @@ cache:
             ```
 
 3. `deploy` Đây là nơi bạn sẽ định nghĩa các plugin của bạn.
+    Plugin thường là nơi bạn sẽ sử dụng để thực thi những công việc sau khi chạy test. Một ví dụ cụ thể  và thường gặp nhất là bạn có thể muốn FramgiaCI tự động deploy code lên server sau khi chạy test thành công chẳng hạn. Hiện FramgiaCI đã hộ trợ auto deploy với:
+    * rocketeer
+    * capistrano
+    * docker ( Tự động build project của bạn thành một docker image mới. Push docker image này lên và pull update vào server của bạn )
+    
+    Và vì lý do bảo mật cho các dự án của bạn. ( Auto deploy thường cần đến một cặp ssh public và private keys để ssh vào server của bạn để chạy các tác vụ đã được định nghĩa sẵn ). Nên deploy bạn buộc phải sử dụng những official docker image mặc định dưới đây:
+    * framgiaciteam/deployer:2.0 - cho dự án PHP sử dụng rocketeer
+    * framgiaciteam/rails-deployer:1.0 - cho dự án Rails sử dụng capistrano
+    * docker:dind - Một image docker in docker nối tiếng cho phép bạn sử dụng docker bên trong docker mà hoàn toàn cô lập với máy host
+    * framgiaciteam/ssh-able:latest plugin cho phép bạn sử dụng để ssh vào server khác
+
+    Ngoài những image mặc định ở trên. Bạn hoàn toàn có thể thoải mái tạo plugin cho riêng mình mà không bị ràng buộc phải sử dụng những image cô định. Mặc định, FramgiaCI cung cấp cho bạn những biến mội trường sau để bạn sử dụng trong plugin:
+     ```
+        PLUGIN_REPO_NAME=project_name,
+        PLUGIN_REPO_FULLNAME=project_fullname,
+        PLUGIN_REPO_OWNER=project_owner,
+        PLUGIN_REPO_LINK=https_link_to_github_repo,
+        PLUGIN_REPO_BRANCH=curent_build_branch,
+        PLUGIN_COMMIT_SHA=commit_sha,
+        PLUGIN_COMMIT_MESSAGE=commit_mesage
+        PLUGIN_EVENT=github_event,
+        PLUGIN_COMMIT_AUTHOR=author_commit,
+        PLUGIN_COMMIT_AUTHOR_EMAIL=author_email,
+        PLUGIN_BUILD_STATUS=build_status,
+        PLUGIN_BUILD_NUMBER=build_nummer,
+        PLUGIN_PULL_REQUEST_NUMBER=oull_request_number,
+        PLUGIN_REPO_CLONE_URL=ssh_clone_url,
+        PLUGIN_PROJECT_TYPE=type_of_project,
+        PLUGIN_REPO_DEFAULT_BRANCH=repo_default_branch,
+        PLUGIN_ESLINT=eslint_test_result,
+        PLUGIN_PDEPEND=pdepend_test_result,
+        PLUGIN_PHPCPD=phpcpd_test_result,
+        PLUGIN_PHPCS=phpcs_test_result,
+        PLUGIN_PHPMD=phpmd_test_result,
+        PLUGIN_PHPMETRICS=phpmetrics_test_result,
+        PLUGIN_PHPUNIT=phpunit_test_result,
+     ```
+    Đây là một ví dụ đơn giản về cách mà bạn có thể sử dụng các environment này cho plugin của bạn. Plugin này sẽ gửi chỉ kết quả của auto deploy qua chatwork cho bạn
+    https://github.com/framgiaci/chatwork-deploy-only-plugin/blob/master/commands.sh
+
+    Dưới đây là một ví dụ sử dụng auto deploy với rocketeer:
     ```yml
     rocketeer:
     image: framgiaciteam/autodeploy:latest
@@ -122,7 +163,29 @@ cache:
     +  `when`: Định nghĩa khi nào pluing của bạn sẽ chạy<br/>
         + `branch:master`: Chạy khi build ở branch master
         + `status:success`: Chạy khi bản build `success`
-    + `run`: Câu lệnh bạn sẽ chạy bên trong plugin container
+    + `run`: Câu lệnh deploy của bạn 
+
+    Còn đây là một ví dụ khác về việc deploy với Docker:
+    ```
+        dockerd:
+            image: docker:dind
+            when : 
+            status: [success, failed]
+            commands:
+            - docker login -u=$$docker_username -p=$$docker_password
+            - docker build -t $$release_image /workdir
+            - docker push $$release_image
+        ssh:
+            image: framgiaciteam/ssh-able:latest
+            when : 
+            status: [success, failed]
+            commands:
+            - ssh -T $$user@$$serverIP docker pull $$release_image
+    ```
+    Đầu tiên chúng ta sử dụng plugin với image là docker:dind để build image và push nó lên dockerhub.
+    Sau đó sử dụng plugin ssh với image framgiaciteam/ssh-able:latest để ssh vào server và chạy lệnh docker pull image.
+    Trên đây là hai ví dụ đơn giản để bạn có thể hình dung được việc settup auto deploy với FramgiaCI. Tất nhiên, số lượng command mà bạn chạy trong container là không hạn chế.
+
 4. `Cache`: <br/>
     FramgiaCI chỉ thực hiện cache khi folder bạn cần cache thực sự thay đổi. Ví dụ
     ```yml
