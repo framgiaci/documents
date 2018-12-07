@@ -1,24 +1,15 @@
 project_type: php
 build:
   general_test:
-    image: daothaison/civ3-workspace:latest
-    #environment:
-      #YOU_ENVIRONMENT_1: VALUE_1
-      #YOU_ENVIRONMENT_1: VALUE_2
-      #YOU_ENVIRONMENT_1: VALUE_3
+    image: framgiaciteam/laravel-workspace:latest
     services:
-      mysql:
+      mysql_test:
         image: mysql:5.7
         environment:
-          MYSQL_DATABASE: homestead
-          MYSQL_USER: homestead
+          MYSQL_DATABASE: homestead_test
+          MYSQL_USER: homestead_test
           MYSQL_PASSWORD: secret
           MYSQL_ROOT_PASSWORD: root
-      mongodb:
-        image: mongo:latest
-        environment:
-          MONGO_INITDB_ROOT_USERNAME: root
-          MONGO_INITDB_ROOT_PASSWORD: example
     prepare:
       - cp .env.civ3.example .env
       - php artisan config:clear
@@ -62,7 +53,7 @@ deploy:
     image: framgiaciteam/deployer:2.0
     when:
       branch: develop
-    run: php rocketeer.phar deploy --on=testing --no-interaction
+    run: php rocketeer.phar deploy --on=testing --no-interaction --branch=develop
 cache:
   composer:
     folder: vendor
