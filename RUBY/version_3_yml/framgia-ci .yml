@@ -6,10 +6,10 @@ build:
       mysql_test:
         image: mysql:5.7
         environment:
-          MYSQL_DATABASE: ats_test
+          MYSQL_DATABASE: ac_test
           MYSQL_USER: test
           MYSQL_PASSWORD: test
-          MYSQL_ROOT_PASSWORD: root         
+          MYSQL_ROOT_PASSWORD: root
     prepare:
       - cp database-ci.yml config/database.yml
       - bundle install --path vendor/bundle
@@ -37,16 +37,18 @@ test:
   eslint:
     ignore: true
     command: rake eslint:run_all format=checkstyle output_file=.framgia-ci-reports/eslint.xml app/
-  rails_best_practices:
-    ignore: true
-    command: rails_best_practices --format html --output-file .framgia-ci-reports/rails_best_practices.html app/
 cache:
   gems:
     folder: vendor/bundle
     file: Gemfile.lock
 deploy:
-  capistrano_staging:
+  staging:
     image: framgiaciteam/rails-deployer:1.0
     when:
-      branch: master
+      branch: develop
+    run: cap staging deploy
+  production:
+    image: framgiaciteam/rails-deployer:1.0
+    when:
+      branch: master_v2
     run: cap production deploy
