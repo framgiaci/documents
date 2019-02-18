@@ -221,9 +221,17 @@ Tại trang home khi click vào từng bản build, chúng ta sẽ đến page c
     </tr>
 </table>
 
+
 ## 6. Setting & Notification
-Sau khi active project để bắt đầu sử dụng hệ thống, hoặc trong quá trình sử dụng bạn có thể vào setting để lựa chọn những điều kiện chạy build mà bạn muốn hoặc vào notification để lựa chọn hình thức gửi message là chatwork hoặc slack.
-![available](https://raw.githubusercontent.com/framgiaci/documents/master/images/Selection_021.png)
+Sau khi active project để bắt đầu sử dụng hệ thống, hoặc trong quá trình sử dụng bạn có thể vào setting để lựa chọn những điều kiện chạy build mà bạn muốn, hoặc vào notification để lựa chọn hình thức gửi message là chatwork hoặc slack.
+
+![available](./images/setting.png)
+
+Trên đây là hình ảnh một số setting trên web cho bản build. Tại đây chúng ta có thể lựa chọn chạy build theo event github. Ví dụ như chỉ chạy khi `push` hoặc `pull`...
+
+Ngoài lựa chọn chỉ chạy build theo event github. Framgia CI còn cho phép bạn lựa chọn chạy build chỉ trên một số branch chỉ định. Điều này đặc biệc hữu ích trong trường hợp repo không được fork về, nên mỗi lần member push code lên branch riêng đều chạy build gây tốn kém tài nguyên và thời gian. Thay vào đó, khi chỉ định chạy build trên branch sẽ giảm bớt số lượng bản build không cần thiết.
+í dụ, khi bạn nhập là `develop` - thì chỉ có push code lên develop hoặc gửi pull request đến `develop` thì CI mới thực hiện chạy build. Còn nếu là push code lên branh bình thường của cá nhân member thì không.
+
 
 `FramgiaCI` cung cấp tính năng comment trên github khi gặp lỗi convention sẽ có một bot chỉ cho bạn dòng nào của file nào đang bị lỗi, và lỗi đó là gì. Để thực hiện điều đó đơn bản bạn chỉ cẩn vào setting và thêm bot vào project của bạn bằng cách nhấn button  `Add github bot to this repo `
 Nếu trong quá trình làm việc, dự án được thêm member trên github thì bạn cần vào đồng bộ member cho project và quyền cho từng member bằng cách nhất button `Re-sync repo's member`.
@@ -234,6 +242,10 @@ Khi lựa chọn hình thức notification, sau mỗi bản build sẽ có messa
 > Với chatwork:
 > 1. Add key cho bot
 > 2. Add room id, lưu ý là bot được add ở trên phải đang join room này.
+> 3. Trường hợp bạn chỉ muốn gửi thông báo chatwork về khi có bản build trên một số branch nhất định. Nhập danh sách cách branch đó vào input như hình dưới:
+![available](./images/chatwork.png)
+> 4. Trường hợp chỉ gửi thông báo theo một số event nhất định. Chọn các event mong muốn như hình bên trên. Ví dụ, nếu bạn chọn `Deploy event` thì chỉ khi nào bản build chạy deploy thì mới có thông báo message về chatwork.
+
 
 > Với slack
 > 1. Add slack hook bao gồm: `slack webhook` và `tên hiển thị cho slack` là gì.
