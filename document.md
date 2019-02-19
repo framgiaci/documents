@@ -225,7 +225,7 @@ Tại trang home khi click vào từng bản build, chúng ta sẽ đến page c
 ## 6. Setting & Notification
 Sau khi active project để bắt đầu sử dụng hệ thống, hoặc trong quá trình sử dụng bạn có thể vào setting để lựa chọn những điều kiện chạy build mà bạn muốn, hoặc vào notification để lựa chọn hình thức gửi message là chatwork hoặc slack.
 
-![available](./images/setting.png)
+![available](https://github.com/framgiaci/documents/blob/master/images/setting.png)
 
 Trên đây là hình ảnh một số setting trên web cho bản build. Tại đây chúng ta có thể lựa chọn chạy build theo event github. Ví dụ như chỉ chạy khi `push` hoặc `pull`...
 
@@ -243,7 +243,7 @@ Khi lựa chọn hình thức notification, sau mỗi bản build sẽ có messa
 > 1. Add key cho bot
 > 2. Add room id, lưu ý là bot được add ở trên phải đang join room này.
 > 3. Trường hợp bạn chỉ muốn gửi thông báo chatwork về khi có bản build trên một số branch nhất định. Nhập danh sách cách branch đó vào input như hình dưới:
-![available](./images/chatwork.png)
+![available](https://github.com/framgiaci/documents/blob/master/images/chatwork.png)
 > 4. Trường hợp chỉ gửi thông báo theo một số event nhất định. Chọn các event mong muốn như hình bên trên. Ví dụ, nếu bạn chọn `Deploy event` thì chỉ khi nào bản build chạy deploy thì mới có thông báo message về chatwork.
 
 
