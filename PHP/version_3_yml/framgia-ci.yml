@@ -1,7 +1,7 @@
 project_type: php
 build:
   general_test:
-    image: docker:dind
+    image: framgiaciteam/laravel-workspace:latest
     services:
       mysql_test:
         image: mysql:5.7
@@ -11,9 +11,11 @@ build:
           MYSQL_PASSWORD: secret
           MYSQL_ROOT_PASSWORD: root
     prepare:
-      - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $REGISTRY_SERVER
-      - docker pull $RELEASE_IMAGE || true
-test:
+      - cp .env.civ3.example .env
+      - php artisan config:clear
+      - composer install
+      - framgia-ci test-connect mysql_test 3306 60
+      - php artisan migrate --database=mysql_test
   eslint:
     ignore: false
     command: eslint --format=checkstyle
