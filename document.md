@@ -257,11 +257,11 @@ Khi lựa chọn hình thức notification, sau mỗi bản build sẽ có messa
 
 ![available](https://github.com/framgiaci/documents/blob/master/images/Remote_Configuration.png)
 
-Bạn cần kích hoạt nút `Use remote configuration` để sử dụng tính năng này. Sau đó, bạn điền nội dung file cấu hình FramgiaC
-I vào bộ soạn thảo bên dưới.
+Bạn cần kích hoạt nút `Use remote configuration` để sử dụng tính năng này. Sau đó, bạn điền nội dung file cấu hình FramgiaCI vào bộ soạn thảo bên dưới.
 > Lưu ý:
 > Ở phiên bản beta chúng tôi chưa hoàn toàn validate được hết cú pháp YAML, bạn có thể chỉnh sửa nội dung 
 trên các editor chính thống và sử dụng nội dung đó trên FramgiaCI
 
 <hr>
+
 Trên đây là hướng dẫn tổng quan về cách sử dụng FramgiaCI, Kết hợp với cách config được mô tả trong file `README.md` hy vọng bạn đã có thể áp dụng thành công FramgiaCI vào project của mình.
