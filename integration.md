@@ -121,6 +121,7 @@ cache:
     * docker:dind - Một image docker in docker nối tiếng cho phép bạn sử dụng docker bên trong docker mà hoàn toàn cô lập với máy host
     * framgiaciteam/ssh-able:latest plugin cho phép bạn sử dụng để ssh vào server khác
 
+    #### -
     Ngoài những image mặc định ở trên. Bạn hoàn toàn có thể thoải mái tạo plugin cho riêng mình mà không bị ràng buộc phải sử dụng những image cô định. Mặc định, FramgiaCI cung cấp cho bạn những biến mội trường sau để bạn sử dụng trong plugin:
      ```
         PLUGIN_REPO_NAME=project_name,
