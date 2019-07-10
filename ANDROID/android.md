@@ -1,125 +1,47 @@
-## Bắt đầu
 
+Lưu ý : Các file cấu hình được đặt trong thư mục  `ANDROID/version_3_yml`
+### 1. Cấu hình CI SUN
 Để bắt đầu sử dụng SunCI, bổ sung file `framgia-ci.yml` ở thư mục gốc của dự án.
-```yaml
-#framgia-ci.yml
 
-project_type: android
+Lưu ý  :  trong file `framgia-ci.yml` mặc định sẽ check các coding convention `check_style` ,`check_pmd` ,`check_lint`  . Có thế xoá phần này nếu không cần thiết cho dự án .
 
-build:
-  configurations:
-    image: framgiaciteam/android:latest
-    prepare:
-      - fastlane android Build
-      - framgia-ci run --logs
-test:
-  run_unit_test:
-    ignore: false
-    command: ./gradlew -PciBuild=true :app:testDebugUnitTest --no-daemon --max-workers 2
-  check_style:
-    ignore: false
-    command: fastlane android checkstyle
-  check_pmd:
-    ignore: false
-    command: fastlane android check_pmd
-  check_lint:
-    ignore: false
-    command: fastlane android check_lint
-  test_build:
-    ignore: false
-    command: fastlane android BuildFastlane
+Ngược lại để chạy được command `check_style` ,`check_pmd` ,`check_lint` cần cầu hình file `checkci.gradle`  ( xem tại **Cấu hính checkci.gradle** ) 
+
+### 2. Cấu hình Fastlane 
+1) Bổ sung thư mục `fastlane` vào thư mục gốc của dự án 
+2) Cấu hình các `KEY` , `API_TOKEN` cần thiết  
+Trong thư mục `fastlane/.env.secret` thêm các thông tin cần thiết theo bảng giải thích bên dưới 
+
+| KEY | Ý Nghĩa |  Tham khảo |
+| -------- | -------- | -------- |
+| `FABRIC_API_TOKEN`     | FABRIC_API_TOKEN của  Fabric , để đẩy các bản build APK lên Fabric     |  [API_TOKEN ](https://docs.fabric.io/android/fabric/settings/api-keys.html)     |
+| `FABRIC_BUILD_SECRET`     | FABRIC_BUILD_SECRET của Fabric     | [KEY SECRET ](https://docs.fabric.io/android/fabric/settings/api-keys.html)     |
+| `GROUP_TESTER`     | Tên Alias của Manage Group trên Fabric | [Manage Testers ](https://docs.fabric.io/apple/beta/tester-management.html)     |
+| `CHATWORK_API_TOKEN`     | TOKEN của Account boot Chat Work , để thông báo mỗi khi có bản build mới trên Fabric     |      |
+| `CHATWORK_ROOM_ID`     | Room ID của Chat Work muốn thông báo   |      |
+| `SEND_TO`     | Danh sách ID Chat word  muốn TO  trực tiếp |      |
+
+3) Cập nhật thông tin mỗi khi tạo Pull Request 
+
++ Trong thư mục `fastlane/.env.info` thêm các thông tin cần thiết theo bảng giải thích bên dưới
+
+| KEY | Ý Nghĩa |  Tham khảo |  
+| -------- | -------- | -------- | 
+| `BUILD_TYPE`     | Tên của `build variants`  trong  dự án | [Build Variants](https://developer.android.com/studio/build/build-variants)     | 
+| `TICKET_NUMBER`     | Refer theo number ticket  `task/function/fixbug` trong dự án . Mục đích cho việc tracking |    
+| `DISTRIBUTE_FABRIC`     | + Nếu `true` khi tạo PR sẽ tạo ra file APK từ PR đó , đẩy lên Fabric và thông báo qua CW  . Ngược lại `false` sẽ bỏ qua phần trên   |    
+
+### 3. Cấu hình checkci.gradle 
+1) Bổ sung file `checkci.gradle` ở thư mục gốc của dự án
+2) Bổ sung thư mục `config` vào thư mục gốc của dự án 
+3) Trong file `app/build.gradle`  thêm 
+`apply from: '../checkci.gradle'`
+
+###     4. Bổ sung
+1) Thêm vào file  `.gitignore`
+```
+fastlane/report.xml
+fastlane/README.md
+.framgia-ci-reports
 ```
 
-Cấu hình các command cho fastlane.
-```java
-/*
- * for ci
- */
-apply plugin: 'checkstyle'
-apply plugin: 'findbugs'
-apply plugin: 'pmd'
-
-check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'cpd'
-
-dependencies {
-    checkstyle 'com.puppycrawl.tools:checkstyle:7.6'
-}
-
-task checkstyle(type: Checkstyle) {
-    def conf
-    if (project.hasProperty('checkStyleConfigFile')) {
-        conf = file(checkStyleConfigFile)
-    } else {
-        conf = file("${project.rootDir}/config/checkstyle/android-style.xml")
-    }
-    configFile conf
-    configProperties.checkstyleSuppressionsPath = file("${project.rootDir}/config/checkstyle/suppressions.xml")
-    source 'src'
-    include '**/*.java'
-    exclude '**/gen/**'
-    exclude '**/R.java'
-    exclude '**/BuildConfig.java'
-    reports {
-        xml.enabled = true
-        html.enabled = true
-        xml {
-            destination "${project.rootDir}/.framgia-ci-reports/checkstyle/checkstyle.xml"
-        }
-        html {
-            destination "${project.rootDir}/.framgia-ci-reports/checkstyle/checkstyle.html"
-        }
-    }
-    classpath = files()
-    ignoreFailures = true
-}
-
-task pmd(type: Pmd) {
-    ignoreFailures = true
-
-    def conf
-    if (project.hasProperty('pmdRuleSetFiles')) {
-        conf = file(pmdRuleSetFiles)
-    } else {
-        conf = files("${project.rootDir}/config/pmd/ruleset.xml")
-    }
-    ruleSetFiles = conf
-    ruleSets = []
-
-    source 'src'
-    include '**/*.java'
-    exclude '**/gen/**'
-
-    reports {
-        xml.enabled = true
-        html.enabled = true
-        xml {
-            destination "${project.rootDir}/.framgia-ci-reports/pmd/pmd.xml"
-        }
-        html {
-            destination "${project.rootDir}/.framgia-ci-reports/pmd/pmd.html"
-        }
-    }
-}
-
-task cpd doLast {
-    File outDir = new File("$project.buildDir/reports/pmd/")
-    outDir.mkdirs()
-    ant.taskdef(name: 'cpd',
-            classname: 'net.sourceforge.pmd.cpd.CPDTask',
-            classpath: configurations.pmd.asPath)
-    ant.cpd(minimumTokenCount: '100',
-            format: 'xml',
-            outputFile: new File(outDir , 'cpd.xml')) {
-        fileset(dir: "src/main/java") {
-            include(name: '**/*.java')
-        }
-    }
-
-}
-task copyMd( type:Copy ) {
-    from "${project.buildDir}/reports/test"
-    include '**/*.html'
-    into "${project.rootDir}/.framgia-ci-reports/buidahnma/"
-}
-
-```

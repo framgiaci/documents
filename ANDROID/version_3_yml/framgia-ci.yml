@@ -1,16 +1,17 @@
+
 project_type: android
 
 build:
   configurations:
-    image: framgiaciteam/android:latest
-    prepare:
+     image: framgiaciteam/android:latest
+     prepare:
       - fastlane android Build
       - framgia-ci run --logs
-
+      - fastlane android beta_distribute
 test:
   run_unit_test:
     ignore: false
-    command: ./gradlew -PciBuild=true :app:testDebugUnitTest --no-daemon --max-workers 2
+    command: fastlane android run_unitTest
   check_style:
     ignore: false
     command: fastlane android checkstyle
@@ -20,6 +21,3 @@ test:
   check_lint:
     ignore: false
     command: fastlane android check_lint
-  test_build:
-    ignore: false
-    command: fastlane android BuildFastlane
