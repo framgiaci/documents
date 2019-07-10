@@ -4,7 +4,7 @@
 
 Một yêu cầu thiết lập quan trọng để có thể chạy framgia-ci là bạn phải có file cấu hình `framgia-ci.yml` trong project của bạn. Bạn có thể tạo một file bằng cách thủ công với nội dụng như dưới đây. Hoặc có thể [Framgia CI CLI Tool](https://github.com/framgiaci/framgia-ci-cli) và sử dụng tool này để tự động sinh file `framgia-ci.yml`. 
 
-```yml
+```yaml
 project_type: php
 build:
   general_test:
@@ -252,4 +252,62 @@ RUN gem install rspec \
     robocop \
     rake
 WORKDIR /
+```
+
+## Hiển thị Coverage cho các dự án viết Unit test.
+Cấu hình block test trong file `framgia-ci.yml`, theo cấu trúc tương ứng với tool tương ứng, bạn cần phải 
+hướng output coverage dạng file html vào thư mục `.framgia-ci-reports/coverage` để SunCI có thể đọc được kết quả.
+
+### PHPUnit
+```yaml
+test:
+  phpunit:
+    ignore: false
+    command:
+      - php -dzend_extension=xdebug.so vendor/bin/phpunit
+        --coverage-clover=.framgia-ci-reports/coverage-clover.xml
+        --coverage-html=.framgia-ci-reports/coverage
+```
+
+### Jest
+
+```yaml
+test:
+  jest:
+    ignore: false
+    command:
+      - yarn jest --coverage
+```
+
+Ngoài ra, trong file `jest.config.js`, bạn cần config output html của Jest đến thư mục của SunCI:
+```javascript 1.8
+
+module.exports = {
+  coverageDirectory: '.framgia-ci-reports/coverages/jest',
+  coverageReporters: ['html'],
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx}',
+  ],
+  coverageThreshold: {
+    global: {
+      statements: 70,
+      branches: 70,
+      functions: 70,
+      lines: 70,
+    },
+  },
+  moduleDirectories: ['node_modules', 'app'],
+  moduleNameMapper: {
+    '.*\\.(css|less|styl|scss|sass)$': '<rootDir>/internals/mocks/cssModule.js',
+    '.*\\.(jpg|jpeg|png|svg|gif|eot|otf|webp|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      '<rootDir>/tests/mocks/image.js',
+  },
+  setupFilesAfterEnv: [
+    '<rootDir>/test/testing/test-bundler.js',
+    'react-testing-library/cleanup-after-each',
+  ],
+  setupFiles: ['raf/polyfill'],
+  testRegex: 'tests/.*\\.test\\.js$',
+  snapshotSerializers: [],
+}
 ```
