@@ -1,0 +1,158 @@
+before_all do
+  Dotenv.overload '.env.secret'
+  Dotenv.overload '.env.info'
+end
+
+after_all do |lane|
+
+end
+
+platform :android do
+
+desc 'Build app  .
+   Example:  fastlane android  buildApp buildType:develop ticketNumber:1234 '
+  lane :Build do |values|
+     ticketNumber = "#{ENV['TICKET_NUMBER']}"
+     buildType = "#{ENV['BUILD_TYPE']}"
+    puts "------------------- Stating build app  : #{buildType} .......... #{ticketNumber} "
+#build
+    gradle(task: 'clean' )
+    gradle(task: 'assemble', build_type: buildType, properties: { 'versionCode' => ticketNumber } )
+    puts "------------------- Build app successfully ! "
+  end
+desc 'lane check style code'
+  lane :checkstyle do |values|
+#build
+    gradle(task: 'checkstyle' )
+    puts "------------------- Check style finish ! "
+  end
+
+#=========================
+
+  desc 'lane PMD code'
+    lane :check_pmd do |values|
+  #build
+      gradle(task: 'pmd' )
+      puts "------------------- check PMD finish ! "
+    end
+
+#=========================
+desc 'lane check Lint code'
+    lane :check_lint do |values|
+  #build
+      gradle(task: 'lint' )
+      puts "------------------- check Lint finish ! "
+    end
+
+desc 'lane run Unit Test'
+    lane :run_unitTest do |values|
+      buildType = "#{ENV['BUILD_TYPE']}"
+      buildType = buildType+"UnitTest"
+      gradle(task: 'test', build_type: buildType )
+      puts "------------------- run Unit Test finish ! "
+    end
+
+#=========================
+desc "Beta Distribution "
+  lane :beta_distribute do
+  ticketNumber = "#{ENV['TICKET_NUMBER']}"
+  buildType = "#{ENV['BUILD_TYPE']}"
+  distribution = "#{ENV['DISTRIBUTE_FABRIC']}"
+
+  puts "------------------- Build app -----ticketNumber- #{ticketNumber} - -----buildType- #{buildType}! "
+  releaseNoteFile = File.read("./temp/releaseNote.txt")
+  time1 = Time.new
+  time = time1.strftime("%Y-%m-%d %H:%M:%S")
+ releaseNote =   time + "   " + releaseNoteFile
+  puts "------------------- Build app ---------- releaseNote ------  #{releaseNote}! "
+  #build
+  begin
+ # buildApp(ticketNumber: ticketNumber , buildType: buildType)
+  rescue => ex
+    UI.error(ex)
+  end
+  if distribution.nil? || distribution == 'false'
+     puts "------------------- Build app -----ticketNumber-----distribution- #{distribution}! "
+  else
+     puts "------------------- Build app -----ngon-----distribution- #{distribution}! "
+     begin
+       uploadFabric(releaseNote:releaseNote)
+      rescue => ex
+      UI.error(ex)
+     end
+   #-------------
+   begin
+    commit = last_git_commit
+    contentCW =
+    "Ticket #{ticketNumber} has been uploaded successfully to Fabric!
+    Platform : Android
+    BuildType : develop
+    Build number : #{ticketNumber}
+    Author : #{commit[:author]}
+    Email : #{commit[:author_email]}
+    Note : #{releaseNote} "
+     puts "------------------- Build app -----note - #{contentCW}! "
+  notifyCW(contentCW:contentCW)
+  rescue => ex
+    UI.error(ex)
+  end
+  end
+
+  end
+
+  # -------------------
+
+desc 'Build app  .
+   Example:  fastlane android  buildApp buildType:develop ticketNumber:1234 '
+  lane :buildApp do |values|
+    ticketNumber = values[:ticketNumber]
+    buildType = values[:buildType]
+    puts "------------------- Stating build app  : #{buildType} .......... #{ticketNumber} "
+#build
+    gradle(task: 'clean' )
+    gradle(task: 'assemble', build_type: buildType, properties: { 'versionCode' => ticketNumber })
+    puts "------------------- Build app successfully ! "
+  end
+#+++++++++++++++++++
+
+
+desc 'Upload to Fabric.
+   Example:  fastlane android  uploadFabric '
+lane :uploadFabric do |values|
+   releaseNote = values[:releaseNote]
+   # apk = Actions.lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
+   # value = File.dirname(path)
+   va = File.absolute_path("../app/build/outputs/apk/")  
+   va2 = va+'/*/*.apk'
+   path = Dir[va2][0]
+   puts "------------------- APK .......... #{path}  -------"
+
+ crashlytics(
+   api_token: "#{ENV['FABRIC_API_TOKEN']}",
+   build_secret: "#{ENV['FABRIC_BUILD_SECRET']}",
+   # groups:["#{ENV['GROUP_TESTER']}"],
+   notifications: true,
+   notes: "#{releaseNote}",
+   apk_path: path
+  )
+ puts "------------------- Distribution via Fabric successfully !!  "
+end
+
+#++++++++++++++++++
+desc "notification on chatwork
+ Example : fastlane android  notifyCW "
+  lane :notifyCW do |values|
+    puts "------------------- Put notification to Chatwork ----------------------  "
+    sendTo = ENV['SEND_TO']
+    content = values[:contentCW]
+    puts "------------------- Put notification to Chatwork ---------------------- #{content} "
+    chatwork(
+        message: "
+        #{sendTo}
+        #{content}",
+        roomid: "#{ENV['CHATWORK_ROOM_ID']}", #change with your room id
+        success: true,
+        api_token: "#{ENV['CHATWORK_API_TOKEN']}" #api token of chatbot
+    )
+end
+end

@@ -1,0 +1,85 @@
+/*
+ * for ci
+ */
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+
+check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'cpd'
+
+dependencies {
+    checkstyle 'com.puppycrawl.tools:checkstyle:7.6'
+}
+
+task checkstyle(type: Checkstyle) {
+    def conf
+    if (project.hasProperty('checkStyleConfigFile')) {
+        conf = file(checkStyleConfigFile)
+    } else {
+        conf = file("${project.rootDir}/config/checkstyle/android-style.xml")
+    }
+    configFile conf
+    configProperties.checkstyleSuppressionsPath = file("${project.rootDir}/config/checkstyle/suppressions.xml")
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    exclude '**/R.java'
+    exclude '**/BuildConfig.java'
+    reports {
+        xml.enabled = true
+        html.enabled = true
+        xml {
+            destination "${project.rootDir}/.framgia-ci-reports/checkstyle/checkstyle.xml"
+        }
+        html {
+            destination "${project.rootDir}/.framgia-ci-reports/checkstyle/checkstyle.html"
+        }
+    }
+    classpath = files()
+    ignoreFailures = true
+}
+
+task pmd(type: Pmd) {
+    ignoreFailures = true
+
+    def conf
+    if (project.hasProperty('pmdRuleSetFiles')) {
+        conf = file(pmdRuleSetFiles)
+    } else {
+        conf = files("${project.rootDir}/config/pmd/ruleset.xml")
+    }
+    ruleSetFiles = conf
+    ruleSets = []
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+        xml {
+            destination "${project.rootDir}/.framgia-ci-reports/pmd/pmd.xml"
+        }
+        html {
+            destination "${project.rootDir}/.framgia-ci-reports/pmd/pmd.html"
+        }
+    }
+}
+
+task cpd doLast {
+    File outDir = new File("$project.buildDir/reports/pmd/")
+    outDir.mkdirs()
+    ant.taskdef(name: 'cpd',
+            classname: 'net.sourceforge.pmd.cpd.CPDTask',
+            classpath: configurations.pmd.asPath)
+    ant.cpd(minimumTokenCount: '100',
+            format: 'xml',
+            outputFile: new File(outDir , 'cpd.xml')) {
+        fileset(dir: "src/main/java") {
+            include(name: '**/*.java')
+        }
+    }
+
+}
+
