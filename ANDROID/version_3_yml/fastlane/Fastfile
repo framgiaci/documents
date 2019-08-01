@@ -47,8 +47,10 @@ desc 'lane check Lint code'
 desc 'lane run Unit Test'
     lane :run_unitTest do |values|
       buildType = "#{ENV['BUILD_TYPE']}"
-      buildType = buildType+"UnitTest"
-      gradle(task: 'test', build_type: buildType )
+      buildType = "test"+buildType+"UnitTestCoverage"
+      puts "------------------- run Unit test : #{buildType} ! "
+      gradle(task: buildType)
+      gradle(task: 'copyMd')
       puts "------------------- run Unit Test finish ! "
     end
 
@@ -122,7 +124,7 @@ lane :uploadFabric do |values|
    releaseNote = values[:releaseNote]
    # apk = Actions.lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
    # value = File.dirname(path)
-   va = File.absolute_path("../app/build/outputs/apk/")  
+   va = File.absolute_path("../app/build/outputs/apk/")
    va2 = va+'/*/*.apk'
    path = Dir[va2][0]
    puts "------------------- APK .......... #{path}  -------"
