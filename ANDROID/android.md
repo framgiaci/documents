@@ -37,7 +37,17 @@ Trong thư mục `fastlane/.env.secret` thêm các thông tin cần thiết theo
 3) Trong file `app/build.gradle`  thêm 
 `apply from: '../checkci.gradle'`
 
-###     4. Bổ sung
+### 4. Cấu hình test coverage và summary
+Để hiển thị test coverage và test summary cần cấu hình như sau :
+1) Bổ sung file `jacoco.gradle` ở thư mục gốc của dự án
+2) Trong file `app/build.gradle`  thêm 
+`apply from: '../jacoco.gradle'`
+
+Note : Tùy từng dự án mà phần `excludes` trong file `jacoco.gradle` sẽ khác nhau.
+
+Tham khảo thêm tại : [Jacoco](https://www.eclemma.org/jacoco/trunk/index.html)
+
+###     5. Bổ sung
 1) Thêm vào file  `.gitignore`
 ```
 fastlane/report.xml
