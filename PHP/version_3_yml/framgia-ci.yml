@@ -45,7 +45,7 @@ test:
   phpunit:
     ignore: false
     command:
-      - php -dzend_extension=xdebug.so vendor/bin/phpunit
+      - phpdbg -qrr vendor/bin/phpunit -d memory_limit=1024M
         --coverage-clover=.framgia-ci-reports/coverage-clover.xml
         --coverage-html=.framgia-ci-reports/coverage
 deploy:
