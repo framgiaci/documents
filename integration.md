@@ -57,7 +57,7 @@ test:
   phpunit:
     ignore: false
     command:
-      - php -dzend_extension=xdebug.so vendor/bin/phpunit
+      - phpdbg -qrr vendor/bin/phpunit -d memory_limit=1024M
         --coverage-clover=.framgia-ci-reports/coverage-clover.xml
         --coverage-html=.framgia-ci-reports/coverage
 deploy:
@@ -258,13 +258,16 @@ WORKDIR /
 Cấu hình block test trong file `framgia-ci.yml`, theo cấu trúc tương ứng với tool tương ứng, bạn cần phải 
 hướng output coverage dạng file html vào thư mục `.framgia-ci-reports/coverage` để SunCI có thể đọc được kết quả.
 
+Nếu bạn đang cấu hình cho dự án PHP, khi tạo Code Coverage report từ PHPUnit, bạn hãy sử `phpdbg` thay vì `x-debug`.
+Bởi lẽ, thời gian chạy PHPUnit sẽ giảm được từ 70% so với khi dùng với `x-debug`.
+
 ### PHPUnit
 ```yaml
 test:
   phpunit:
     ignore: false
     command:
-      - php -dzend_extension=xdebug.so vendor/bin/phpunit
+      - phpdbg -qrr vendor/bin/phpunit -d memory_limit=1024M
         --coverage-clover=.framgia-ci-reports/coverage-clover.xml
         --coverage-html=.framgia-ci-reports/coverage
 ```
