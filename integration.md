@@ -28,6 +28,7 @@ build:
       - composer install
       - framgia-ci test-connect mysql_test 3306 60
       - php artisan migrate --database=mysql_test
+      - framgia-ci run --logs
 test:
   eslint:
     ignore: false

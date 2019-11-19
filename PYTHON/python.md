@@ -69,6 +69,7 @@ build:
       - make config
       - make install
       - framgia-ci test-connect mysql_test 3306 60
+      - framgia-ci run --logs
 test:
   unittest:
     command: make test

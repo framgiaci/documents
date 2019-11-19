@@ -15,6 +15,7 @@ build:
       - bundle install --path vendor/bundle
       - framgia-ci test-connect mysql_test 3306 60
       - RAILS_ENV=test rake db:drop db:create db:migrate
+      - framgia-ci run --logs
 test:
   bundle-audit:
     ignore: true

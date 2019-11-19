@@ -8,6 +8,7 @@ build:
       - fastlane android Build
       - framgia-ci run --logs
       - fastlane android beta_distribute
+      - framgia-ci run --logs
 test:
   run_unit_test:
     ignore: false
