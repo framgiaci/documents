@@ -1,4 +1,4 @@
-## FramgiaCI Documents
+## Sun*CI Documents
 `Sun*CI` is a CI/CD system developed by Sun Asterisk , beside the main features like the other CI/CD system, `Sun*CI` provided more features for assisting user in developing projects.Here's some instructions you'd better look before intergrate with `Sun*CI`
 ## Permission
 Currently, `Sun*CI` is suporting user login to system using Github, Gitlab  (both https://gitlab.com/ and Sun* Gitlab), Bitbucket account, after logging in, by default your permission will be `User`. Your accessibility  to `Sun*CI` base on your permission as show below:

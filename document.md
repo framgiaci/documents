@@ -1,5 +1,5 @@
 
-# FramgiaCI Documents
+# Sun*CI Documents
 `FramgiaCI` là hệ thống CI/CD do Framgia nghiên cứu và phát triển, ngoài những tính năng chính của một hệ thống CI/CD cần có, FramgiaCI còn cũng cấp thêm nhiều tính năng nhằm giúp người dùng dễ dàng hơn trong quá trình thực hiện dự án, dưới đây là hướng dẫn sử dụng bạn cần biết khi làm việc với FramgiaCI.
 
 ## 1. Permission
