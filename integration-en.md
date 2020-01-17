@@ -1,4 +1,4 @@
-# Integrate FramgiaCI into your Project
+# Integrate Sun*CI into your Project
 
 ## framgia-ci.yml
 
