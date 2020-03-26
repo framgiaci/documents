@@ -59,7 +59,7 @@ desc "Beta Distribution "
   lane :beta_distribute do
   ticketNumber = "#{ENV['TICKET_NUMBER']}"
   buildType = "#{ENV['BUILD_TYPE']}"
-  distribution = "#{ENV['DISTRIBUTE_FABRIC']}"
+  distribution = "#{ENV['DISTRIBUTE_FIREBASE']}"
 
   puts "------------------- Build app -----ticketNumber- #{ticketNumber} - -----buildType- #{buildType}! "
   releaseNoteFile = File.read("./temp/releaseNote.txt")
@@ -78,7 +78,7 @@ desc "Beta Distribution "
   else
      puts "------------------- Build app -----ngon-----distribution- #{distribution}! "
      begin
-       uploadFabric(releaseNote:releaseNote)
+       uploadFirebase(releaseNote:releaseNote)
       rescue => ex
       UI.error(ex)
      end
@@ -86,7 +86,7 @@ desc "Beta Distribution "
    begin
     commit = last_git_commit
     contentCW =
-    "Ticket #{ticketNumber} has been uploaded successfully to Fabric!
+    "Ticket #{ticketNumber} has been uploaded successfully to Firebase App Distribution!
     Platform : Android
     BuildType : develop
     Build number : #{ticketNumber}
@@ -118,9 +118,9 @@ desc 'Build app  .
 #+++++++++++++++++++
 
 
-desc 'Upload to Fabric.
-   Example:  fastlane android  uploadFabric '
-lane :uploadFabric do |values|
+desc 'Upload to Firebase App Distribution.
+   Example:  fastlane android  uploadFirebase '
+lane :uploadFirebase do |values|
    releaseNote = values[:releaseNote]
    # apk = Actions.lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
    # value = File.dirname(path)
@@ -128,16 +128,13 @@ lane :uploadFabric do |values|
    va2 = va+'/*/*.apk'
    path = Dir[va2][0]
    puts "------------------- APK .......... #{path}  -------"
-
- crashlytics(
-   api_token: "#{ENV['FABRIC_API_TOKEN']}",
-   build_secret: "#{ENV['FABRIC_BUILD_SECRET']}",
-   # groups:["#{ENV['GROUP_TESTER']}"],
-   notifications: true,
-   notes: "#{releaseNote}",
-   apk_path: path
+ firebase_app_distribution(
+   app:"#{ENV['FIREBASE_ANDROID_APP_ID']}" ,
+   apk_path: path,
+   release_notes: "#{releaseNote}",
+   # groups:"#{ENV['GROUP_TESTER']}"
   )
- puts "------------------- Distribution via Fabric successfully !!  "
+ puts "------------------- Distribution via Firebase successfully !!  "
 end
 
 #++++++++++++++++++

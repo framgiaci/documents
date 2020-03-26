@@ -14,6 +14,11 @@ Install _fastlane_ using
 ```
 or alternatively using `brew cask install fastlane`
 
+Install Firebase app distribution
+```
+npm install -g firebase-tools
+fastlane add_plugin firebase_app_distribution
+```
 # Available Actions
 ## Android
 ### android Build
@@ -55,10 +60,10 @@ Build app  .
    Example:  fastlane android  buildApp buildType:develop ticketNumber:1234 
 ### android uploadFabric
 ```
-fastlane android uploadFabric
+fastlane android uploadFirebase
 ```
-Upload to Fabric.
-   Example:  fastlane android  uploadFabric 
+Upload to Firebase App Distribution.
+   Example:  fastlane android  uploadFirebase 
 ### android notifyCW
 ```
 fastlane android notifyCW
