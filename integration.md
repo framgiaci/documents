@@ -172,7 +172,7 @@ cache:
         dockerd:
             image: docker:dind
             when : 
-            status: [success, failed]
+              status: [success, failed]
             commands:
             - docker login -u=$$docker_username -p=$$docker_password
             - docker build -t $$release_image /workdir
@@ -180,7 +180,7 @@ cache:
         ssh:
             image: framgiaciteam/ssh-able:latest
             when : 
-            status: [success, failed]
+              status: [success, failed]
             commands:
             - ssh -T $$user@$$serverIP docker pull $$release_image
     ```
