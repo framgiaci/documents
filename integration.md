@@ -1,5 +1,9 @@
 # Integrate Sun*CI into your Project
 
+Để có thể chạy CI vào cho project của bạn thì thông thường bạn phải làm 2 bước:
+  - **Tạo file framgia-ci.yml**
+  - **Active project**
+
 ## framgia-ci.yml
 
 Một yêu cầu thiết lập quan trọng để có thể chạy framgia-ci là bạn phải có file cấu hình `framgia-ci.yml` trong project của bạn. Bạn có thể tạo một file bằng cách thủ công với nội dụng như dưới đây. Hoặc có thể [Framgia CI CLI Tool](https://github.com/framgiaci/framgia-ci-cli) và sử dụng tool này để tự động sinh file `framgia-ci.yml`. 
@@ -233,27 +237,49 @@ cache:
             bundle install --path vendor/bundle
         ```
 ### Cài đặt rspec, brakeman, rake, reek...
-- Một số project gặp trường hợp đã chạy bundle install thành công nhưng rspec báo not foud. Nếu gặp trường hợp này, bạn hãy cài thằng các gems đó vào Dockerfile. Như ví dụ dưới đây:
-```
-FROM ruby:2.4.0
-RUN apt-get install -y libpq5 libpq-dev
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-RUN apt-get install -y nodejs
-# Install eslint from https://www.npmjs.com/package/eslint
-RUN npm install -g eslint
-RUN eslint --version
-RUN apt-get -y update && apt-get -y install ruby-full
-RUN gem install rspec \
-    scss_lint \
-    brakeman \
-    bundle-audit \
-    reek \
-    rails_best_practices \
-    simplecov \
-    robocop \
-    rake
-WORKDIR /
-```
+Một số project gặp trường hợp đã chạy bundle install thành công nhưng rspec báo not foud. Nếu gặp trường hợp này, bạn có thể thử 2 cách sau:
+- #### 1. Tất các các lệnh nếu có thể hãy sử dụng `bundle exec`
+
+  Ví dụ: 
+    - bundle exec bundle-audit check --ignore CVE-2015-9284 > .framgia-ci-reports/bundle-audit.txt
+    - bundle exec rubocop .
+    - bundle exec rspec --format html --out .framgia-ci-reports/rspec.html spec/
+    ...
+- #### 2. Cài thằng các gems đó vào Dockerfile.
+
+  Như ví dụ dưới đây:
+  ```
+  FROM ruby:2.4.0
+  RUN apt-get install -y libpq5 libpq-dev
+  RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+  RUN apt-get install -y nodejs
+  # Install eslint from https://www.npmjs.com/package/eslint
+  RUN npm install -g eslint
+  RUN eslint --version
+  RUN apt-get -y update && apt-get -y install ruby-full
+  RUN gem install rspec \
+      scss_lint \
+      brakeman \
+      bundle-audit \
+      reek \
+      rails_best_practices \
+      simplecov \
+      robocop \
+      rake
+  WORKDIR /
+  ```
+- #### 3. Gem **bundle-audit**
+  
+  Đôi khi bạn gặp lỗi khi chạy lệnh `bundle exec bundle-audit check --update` trên CI
+  ```
+  Updating ruby-advisory-db ...
+  Failed updating ruby-advisory-db!
+  ```
+  Với trường hợp này thì có thể fix bằng cách sử dụng cmd trong **prepare** ở file `framgia-ci.yml` để update *ruby-advisory-db*
+  ```
+      prepare:
+        - git clone https://github.com/rubysec/ruby-advisory-db.git $HOME/.local/share/ruby-advisory-db
+  ```
 
 ## Hiển thị Coverage cho các dự án viết Unit test.
 Cấu hình block test trong file `framgia-ci.yml`, theo cấu trúc tương ứng với tool tương ứng, bạn cần phải 
