@@ -9,19 +9,19 @@ Ngược lại để chạy được command `check_style` ,`check_pmd` ,`check_
 
 ### 2. Cấu hình Fastlane 
 1) Bổ sung thư mục `fastlane` vào thư mục gốc của dự án 
-2) Cấu hình các `KEY` , `API_TOKEN` cần thiết  
+2) Cài firebase_app_distribution [Docs ](https://firebase.google.com/docs/app-distribution)
+3) Cấu hình các `KEY` , `API_TOKEN` cần thiết  
 Trong thư mục `fastlane/.env.secret` thêm các thông tin cần thiết theo bảng giải thích bên dưới 
 
 | KEY | Ý Nghĩa |  Tham khảo |
 | -------- | -------- | -------- |
-| `FABRIC_API_TOKEN`     | FABRIC_API_TOKEN của  Fabric , để đẩy các bản build APK lên Fabric     |  [API_TOKEN ](https://docs.fabric.io/android/fabric/settings/api-keys.html)     |
-| `FABRIC_BUILD_SECRET`     | FABRIC_BUILD_SECRET của Fabric     | [KEY SECRET ](https://docs.fabric.io/android/fabric/settings/api-keys.html)     |
+| `FIREBASE_ANDROID_APP_ID`     | FIREBASE_ANDROID_APP_ID của  App trên Firebase , để đẩy các bản build APK lên Firebase App Distribution     |  [APP_ID ](https://console.firebase.google.com/u/0/project/_/settings/general/)     |
 | `GROUP_TESTER`     | Tên Alias của Manage Group trên Fabric | [Manage Testers ](https://docs.fabric.io/apple/beta/tester-management.html)     |
 | `CHATWORK_API_TOKEN`     | TOKEN của Account boot Chat Work , để thông báo mỗi khi có bản build mới trên Fabric     |      |
 | `CHATWORK_ROOM_ID`     | Room ID của Chat Work muốn thông báo   |      |
 | `SEND_TO`     | Danh sách ID Chat word  muốn TO  trực tiếp |      |
 
-3) Cập nhật thông tin mỗi khi tạo Pull Request 
+4) Cập nhật thông tin mỗi khi tạo Pull Request 
 
 + Trong thư mục `fastlane/.env.info` thêm các thông tin cần thiết theo bảng giải thích bên dưới
 
